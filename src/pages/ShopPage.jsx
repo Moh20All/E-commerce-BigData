@@ -10,20 +10,7 @@ const ShopPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [categories, setCategory] = useState([]);
-  const [categoriesLoading, setCategoriesLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("http://localhost:3000/categories")
-      .then((response) => response.json())
-      .then((data) => {
-        setCategory(data);
-        setCategoriesLoading(false);
-      })
-      .catch((err) => {
-        console.error("Failed to load categories:", err);
-        setCategoriesLoading(false);
-      });
-  }, []);
   useEffect(() => {
     fetch("http://localhost:3000/products")
       .then((response) => response.json())
@@ -36,6 +23,12 @@ const ShopPage = () => {
         setLoading(false);
       });
       
+      fetch("http://localhost:3000/categories")
+      .then((response) => response.json())
+      .then((data) => {
+        setCategory(data)
+        console.dir(data)
+      });
   }, []);
 
   // Pagination Logic
@@ -68,19 +61,18 @@ const ShopPage = () => {
             </div>
 
             {/* Categories */}
-            {categoriesLoading ? (
-  <p className="text-gray-500">Loading categories...</p>
-) : (
-  <ul className="space-y-2">
-    {categories.map((category) => (
-      <li key={category.CategoryId}>
-        <button className="text-gray-600 hover:text-black">
-          {category.CategoryName}
-        </button>
-      </li>
-    ))}
-  </ul>
-)}
+            <div>
+              <h2 className="font-semibold mb-4">Categories</h2>
+              <ul className="space-y-2">
+                {["All", "Furniture", "Lighting", "Decor", "Storage", "Bedding", "Kitchen", "Bathroom"].map((category) => (
+                  <li key={category}>
+                    <button className="text-gray-600 hover:text-black">
+                      {category}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
             {/* Price Filter */}
             <div>
